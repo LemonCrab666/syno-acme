@@ -68,14 +68,14 @@ generateCrt () {
 updateService () {
   echo 'begin updateService'
   echo 'cp cert path to des'
-  /bin/python2 ${BASE_ROOT}/crt_cp.py ${CRT_PATH_NAME}
+  /usr/bin/python3 ${BASE_ROOT}/crt_cp.py ${CRT_PATH_NAME}
   echo 'done updateService'
 }
 
 reloadWebService () {
   echo 'begin reloadWebService'
   echo 'reloading new cert...'
-  /usr/syno/etc/rc.sysv/nginx.sh reload
+  synosystemctl restart nginx
   echo 'relading Apache 2.2'
   stop pkg-apache22
   start pkg-apache22
