@@ -76,10 +76,8 @@ reloadWebService () {
   echo 'begin reloadWebService'
   echo 'reloading new cert...'
   synosystemctl restart nginx
-  echo 'relading Apache 2.2'
-  stop pkg-apache22
-  start pkg-apache22
-  reload pkg-apache22
+  echo 'reloading Apache 2.2'
+  synopkg restart Apache2.2
   echo 'done reloadWebService'  
 }
 
