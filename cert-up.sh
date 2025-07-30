@@ -68,7 +68,7 @@ generateCrt () {
 updateService () {
   echo 'begin updateService'
   echo 'cp cert path to des'
-  /usr/bin/python3 ${BASE_ROOT}/crt_cp.py ${CRT_PATH_NAME}
+  /bin/python3 ${BASE_ROOT}/crt_cp.py ${CRT_PATH_NAME}
   echo 'done updateService'
 }
 
