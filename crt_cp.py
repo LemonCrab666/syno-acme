@@ -26,7 +26,7 @@ try:
     info = json.load(open(INFO_FILE_PATH))
     services = info[SRC_DIR_NAME]['services']
 except:
-    print '[ERR] load INFO file- %s fail' %(INFO_FILE_PATH,) 
+    print('[ERR] load INFO file- %s fail' % (INFO_FILE_PATH,)) 
     sys.exit(1)
 
 CP_FROM_DIR = ARCHIEV_PATH + '/' + SRC_DIR_NAME
