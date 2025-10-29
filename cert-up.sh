@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # path of this script
 BASE_ROOT=$(cd "$(dirname "$0")";pwd)
 # date time
@@ -12,7 +11,6 @@ ACME_BIN_PATH=${BASE_ROOT}/acme.sh
 TEMP_PATH=${BASE_ROOT}/temp
 CRT_PATH_NAME=`cat ${CRT_BASE_PATH}/_archive/DEFAULT`
 CRT_PATH=${CRT_BASE_PATH}/_archive/${CRT_PATH_NAME}
-
 backupCrt () {
   echo 'begin backupCrt'
   BACKUP_PATH=${BASE_ROOT}/backup/${DATE_TIME}
@@ -23,7 +21,6 @@ backupCrt () {
   echo 'done backupCrt'
   return 0
 }
-
 installAcme () {
   echo 'begin installAcme'
   mkdir -p ${TEMP_PATH}
@@ -41,19 +38,17 @@ installAcme () {
   rm -rf ${TEMP_PATH}
   return 0
 }
-
 generateCrt () {
   echo 'begin generateCrt'
   cd ${BASE_ROOT}
   source config
   echo 'begin updating default cert by acme.sh tool'
   source ${ACME_BIN_PATH}/acme.sh.env
-  ${ACME_BIN_PATH}/acme.sh --server letsencrypt --preferred-chain "ISRG Root X1 - R11" --force --log --issue --dns ${DNS} --dnssleep ${DNS_SLEEP} -d "${DOMAIN}" -d "*.${DOMAIN}"
-  ${ACME_BIN_PATH}/acme.sh --force --installcert -d ${DOMAIN} -d *.${DOMAIN} \
+  ${ACME_BIN_PATH}/acme.sh --server letsencrypt --preferred-chain "ISRG Root X1 - R11" --force --log --issue --dns ${DNS} --dnssleep ${DNS_SLEEP} -d "*.${DOMAIN}" -d "${DOMAIN}"
+  ${ACME_BIN_PATH}/acme.sh --force --installcert -d ${DOMAIN} \
     --certpath ${CRT_PATH}/cert.pem \
     --key-file ${CRT_PATH}/privkey.pem \
     --fullchain-file ${CRT_PATH}/fullchain.pem
-
   if [ -s "${CRT_PATH}/cert.pem" ]; then
     echo 'done generateCrt'
     return 0
@@ -64,23 +59,20 @@ generateCrt () {
     exit 1;
   fi
 }
-
 updateService () {
   echo 'begin updateService'
   echo 'cp cert path to des'
   /bin/python3 ${BASE_ROOT}/crt_cp.py ${CRT_PATH_NAME}
   echo 'done updateService'
 }
-
 reloadWebService () {
   echo 'begin reloadWebService'
   echo 'reloading new cert...'
   synosystemctl restart nginx
   echo 'reloading Apache 2.2'
   synopkg restart Apache2.2
-  echo 'done reloadWebService'  
+  echo 'done reloadWebService'
 }
-
 revertCrt () {
   echo 'begin revertCrt'
   BACKUP_PATH=${BASE_ROOT}/backup/$1
@@ -98,7 +90,6 @@ revertCrt () {
   reloadWebService
   echo 'done revertCrt'
 }
-
 updateCrt () {
   echo '------ begin updateCrt ------'
   backupCrt
@@ -108,18 +99,15 @@ updateCrt () {
   reloadWebService
   echo '------ end updateCrt ------'
 }
-
 case "$1" in
   update)
     echo "begin update cert"
     updateCrt
     ;;
-
   revert)
     echo "begin revert"
       revertCrt $2
       ;;
-
     *)
         echo "Usage: $0 {update|revert}"
         exit 1
